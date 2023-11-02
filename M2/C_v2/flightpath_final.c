@@ -220,7 +220,7 @@ int main () {
     // populate luminosity array
     generateLuminosity(lum, lights);
 
-    // write lum to a txt file
+    //write lum to a txt file
     // FILE *fp;
     // fp = fopen("luminosity.txt", "w");
     // for (int i = 0; i < N; i++) {

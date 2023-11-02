@@ -49,44 +49,41 @@ void generateLuminosity (float lum[N][N], int lights[L][L_SIZE]) {
     }
 
     // optimum threads is 32 I believe
-    omp_set_num_threads(4);
+    // omp_set_num_threads(4);
+    // optimum loop sizes
+    // size_t ib = std::min(256, N);
+    // size_t jb = std::min(512, N);
+    // size_t kb = std::min(16, N);
 
     // optimum loop sizes
     // size_t ib = std::min(256, N);
     // size_t jb = std::min(512, N);
     // size_t kb = std::min(16, N);
     // loop through lum array
-    # pragma omp parallel
-    {
+    // # pragma omp parallel
+    // {
     int blockSize = 64;
     int j, i, k;
     //auto one = _mm256_set1_ps(1.0);
-    # pragma omp for
+    // # pragma omp for
 
     for (i = 0; i < N; i+=blockSize) {
         for (j = 0; j < N; j+=blockSize) {
             //float lum_sum = 0.0;
             // loop through lights array
             for (k = 0; k < L; k++) {
-                // for (int di=0; di<blockSize; di++) {
-                //     int I = di + i;
-                //     for (int dj=0; dj<blockSize; dj++) {
-                //         int J = dj + j;
+                for (int di=0; di<blockSize; di++) {
+                    int I = di + i;
+                    for (int dj=0; dj<blockSize; dj++) {
+                        int J = dj + j;
+                        // blocking k doesn't work
                         // calculate distance between light and point (
                         // inverse square law)
-                        //lum[i][j] += 1 / (lum_x[k][i] + lum_y[k][j]);
-                        //lum[i][j] += 1/2;
-                        int lum = 1;
-                        //+ 1 / (
-                //                 lum_x[k + 1][i] + lum_y[k + 1][j]) + 1 / (
-                //                     lum_x[k + 2][i] + lum_y[k + 2][j]) + 1 / (
-                //                         lum_x[k + 3][i] + lum_y[k + 3][j]) + 1 / (
-                //                             lum_x[k + 4][i] + lum_y[k + 4][j]);
-                // //     }
-            //     }
-            // }
+                        lum[I][J] += 1 / (lum_x[k][I] + lum_y[k][J]);
+                    }
+                }
+            }
         }
-    }
 
             // for (k = 0; k < L; k+=blockSize) {
             //     for (int di=0; di<blockSize; di++) {
@@ -113,7 +110,7 @@ void generateLuminosity (float lum[N][N], int lights[L][L_SIZE]) {
             
         }
     }
-}
+// }
     // for (int i = 1; i < N; i+=blockSize) {
     //     for (int j = 1; j < N; j+=blockSize) {
     //         //float lum_sum = 0.0;

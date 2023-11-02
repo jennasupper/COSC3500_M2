@@ -2,9 +2,10 @@
 #include <immintrin.h>//AVX library
 
 #define SCALE_FACTOR 2 // set as 0 temporarily
-#define N 2048 // size of the world
-#define L 100 // number of lights
-#define M 500 // number of moths
+// MUST BE A FACTOR OF 64
+#define N 128 // size of the world
+#define L 10 // number of lights
+#define M 5 // number of moths
 #define L_SIZE 2 // size of the light array
 #define M_SIZE 3 // size of the moth array
 
