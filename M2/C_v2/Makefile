@@ -1,4 +1,4 @@
-CFLAGS = -lm -pg -O0 -fopenmp -mavx -std=c99
+CFLAGS = -lm -pg -O0 -fopenmp -mavx -std=c99 -g
 
 output: setup_final.o flightpath_final.o
 	gcc setup_final.o flightpath_final.o ${CFLAGS} -o flightpath_final

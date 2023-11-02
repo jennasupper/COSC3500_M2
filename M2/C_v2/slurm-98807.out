@@ -1,0 +1,5 @@
+/var/slurm/d/job98807/slurm_script: line 6: 1589000 Segmentation fault      ./flightpath_final
+
+real	0m0.001s
+user	0m0.001s
+sys	0m0.000s
