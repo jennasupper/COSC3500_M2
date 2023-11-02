@@ -62,78 +62,56 @@ void generateLuminosity (float lum[N][N], int lights[L][L_SIZE]) {
     int j, i, k;
     //auto one = _mm256_set1_ps(1.0);
     # pragma omp for
-        for (int i = 1; i < N; i+=blockSize) {
-        for (int j = 1; j < N; j+=blockSize) {
-            float lum_sum = 0.0;
+
+    for (i = 0; i < N; i+=blockSize) {
+        for (j = 0; j < N; j+=blockSize) {
+            //float lum_sum = 0.0;
             // loop through lights array
-            for (int k = 1; k < L; k+=5) {
-                for (int di=0; di<blockSize; di++) {
-                    for (int dj=0; dj<blockSize; dj++) {
+            for (k = 0; k < L; k++) {
+                // for (int di=0; di<blockSize; di++) {
+                //     int I = di + i;
+                //     for (int dj=0; dj<blockSize; dj++) {
+                //         int J = dj + j;
                         // calculate distance between light and point (
                         // inverse square law)
-                        lum_sum += 1 / (
-                            lum_x[k][i] + lum_y[k][j]) + 1 / (
-                                lum_x[k + 1][i] + lum_y[k + 1][j]) + 1 / (
-                                    lum_x[k + 2][i] + lum_y[k + 2][j]) + 1 / (
-                                        lum_x[k + 3][i] + lum_y[k + 3][j]) + 1 / (
-                                            lum_x[k + 4][i] + lum_y[k + 4][j]);
-                    }
-                }
-            }
-            lum[i][j] = lum_sum * SCALE_FACTOR;
+                        //lum[i][j] += 1 / (lum_x[k][i] + lum_y[k][j]);
+                        //lum[i][j] += 1/2;
+                        int lum = 1;
+                        //+ 1 / (
+                //                 lum_x[k + 1][i] + lum_y[k + 1][j]) + 1 / (
+                //                     lum_x[k + 2][i] + lum_y[k + 2][j]) + 1 / (
+                //                         lum_x[k + 3][i] + lum_y[k + 3][j]) + 1 / (
+                //                             lum_x[k + 4][i] + lum_y[k + 4][j]);
+                // //     }
+            //     }
+            // }
         }
     }
 
-    // for (i = 0; i < N; i+=blockSize) {
-    //     for (j = 0; j < N; j+=blockSize) {
-    //         //float lum_sum = 0.0;
-    //         // loop through lights array
-    //         for (k = 0; k < L; k++) {
-    //             // for (int di=0; di<blockSize; di++) {
-    //             //     int I = di + i;
-    //             //     for (int dj=0; dj<blockSize; dj++) {
-    //             //         int J = dj + j;
-    //                     // calculate distance between light and point (
-    //                     // inverse square law)
-    //                     //lum[i][j] += 1 / (lum_x[k][i] + lum_y[k][j]);
-    //                     //lum[i][j] += 1/2;
+            // for (k = 0; k < L; k+=blockSize) {
+            //     for (int di=0; di<blockSize; di++) {
+            //         for (int dj=0; dj<blockSize; dj++) {
 
-    //                     int here = 1;
-    //                     //+ 1 / (
-    //             //                 lum_x[k + 1][i] + lum_y[k + 1][j]) + 1 / (
-    //             //                     lum_x[k + 2][i] + lum_y[k + 2][j]) + 1 / (
-    //             //                         lum_x[k + 3][i] + lum_y[k + 3][j]) + 1 / (
-    //             //                             lum_x[k + 4][i] + lum_y[k + 4][j]);
-    //             // //     }
-    //         //     }
-    //         // }
-    //     }
-    // }
-
-    //         // for (k = 0; k < L; k+=blockSize) {
-    //         //     for (int di=0; di<blockSize; di++) {
-    //         //         for (int dj=0; dj<blockSize; dj++) {
-
-    //         //             for (int dk=0; dk<blockSize; dk++) {
-    //         //                 // calculate distance between light and point (
-    //         //                 // inverse square law)
-    //         //                 lum[i+di][j+dj] += 1 / (
-    //         //                     lum_x[k+dk][i+di] + lum_y[k+dk][j+dj]);
-    //         //             }
-    //         //             //lum[i + di][j + dj] = lum_sum * SCALE_FACTOR;
-    //         //             // calculate distance between light and point (
-    //         //             // inverse square law)
-    //         //             // lum_sum += 1 / (
-    //         //             //     lum_x[k][i] + lum_y[k][j]) + 1 / (
-    //         //             //         lum_x[k + 1][i] + lum_y[k + 1][j]) + 1 / (
-    //         //             //             lum_x[k + 2][i] + lum_y[k + 2][j]) + 1 / (
-    //         //             //                 lum_x[k + 3][i] + lum_y[k + 3][j]) + 1 / (
-    //         //             //                     lum_x[k + 4][i] + lum_y[k + 4][j]);
-    //         //         }
-    //         //     }
-    //         // }
+            //             for (int dk=0; dk<blockSize; dk++) {
+            //                 // calculate distance between light and point (
+            //                 // inverse square law)
+            //                 lum[i+di][j+dj] += 1 / (
+            //                     lum_x[k+dk][i+di] + lum_y[k+dk][j+dj]);
+            //             }
+            //             //lum[i + di][j + dj] = lum_sum * SCALE_FACTOR;
+            //             // calculate distance between light and point (
+            //             // inverse square law)
+            //             // lum_sum += 1 / (
+            //             //     lum_x[k][i] + lum_y[k][j]) + 1 / (
+            //             //         lum_x[k + 1][i] + lum_y[k + 1][j]) + 1 / (
+            //             //             lum_x[k + 2][i] + lum_y[k + 2][j]) + 1 / (
+            //             //                 lum_x[k + 3][i] + lum_y[k + 3][j]) + 1 / (
+            //             //                     lum_x[k + 4][i] + lum_y[k + 4][j]);
+            //         }
+            //     }
+            // }
             
-    //     }
+        }
     }
 }
     // for (int i = 1; i < N; i+=blockSize) {
