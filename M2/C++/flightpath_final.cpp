@@ -60,7 +60,10 @@ int move (
         lights[0][0] - x)*(lights[0][0] - x) + (
             lights[0][1] - y)*(lights[0][1] - y));
 
-    // optimum number of threads is 32???????????????????
+    // omp_set_num_threads(32);
+    // # pragma omp parallel 
+    // {
+    // # pragma omp for
     for (int i = 1; i < L; i++) {
         float distance = sqrt((
             lights[i][0] - x)*(lights[i][0] - x) + (
@@ -70,6 +73,7 @@ int move (
             closest_distance = distance;
         }
     }
+    // }
 
     // convert mean_x and mean_y to ints
     int mean_x_int = (int) mean_x;
@@ -194,6 +198,7 @@ int move (
     // Update moth array
     moth[0] = x;
     moth[1] = y;
+    return 0;
 }
 
 /**

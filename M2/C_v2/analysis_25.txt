@@ -3,12 +3,13 @@ Flat profile:
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
  time   seconds   seconds    calls  ms/call  ms/call  name    
- 93.95      0.82     0.82        1   817.37   817.37  generateLuminosity
-  4.61      0.86     0.04    15000     0.00     0.00  move
-  0.00      0.86     0.00    60000     0.00     0.00  calculateDirection
-  0.00      0.86     0.00     3000     0.00     0.00  meanMothPosition
-  0.00      0.86     0.00        1     0.00     0.00  generateLights
-  0.00      0.86     0.00        1     0.00     0.00  generateMoths
+ 78.64      0.91     0.91                             main
+ 17.28      1.11     0.20        1   200.50   200.50  generateLuminosity
+  1.73      1.13     0.02  5736197     0.00     0.00  calculateDirection
+  1.73      1.15     0.02  1401087     0.00     0.00  move
+  0.86      1.16     0.01     3000     0.00     0.00  meanMothPosition
+  0.00      1.16     0.00        1     0.00     0.00  generateLights
+  0.00      1.16     0.00        1     0.00     0.00  generateMoths
 
  %         the percentage of the total running time of the
 time       program used by this function.
@@ -46,29 +47,29 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 2 byte(s) for 1.17% of 0.86 seconds
+granularity: each sample hit covers 2 byte(s) for 0.86% of 1.16 seconds
 
 index % time    self  children    called     name
                                                  <spontaneous>
-[1]    100.0    0.00    0.86                 main [1]
-                0.82    0.00       1/1           generateLuminosity [2]
-                0.04    0.00   15000/15000       move [3]
-                0.00    0.00    3000/3000        meanMothPosition [5]
+[1]    100.0    0.91    0.25                 main [1]
+                0.20    0.00       1/1           generateLuminosity [2]
+                0.02    0.02 1401087/1401087     move [3]
+                0.01    0.00    3000/3000        meanMothPosition [5]
                 0.00    0.00       1/1           generateLights [6]
                 0.00    0.00       1/1           generateMoths [7]
 -----------------------------------------------
-                0.82    0.00       1/1           main [1]
-[2]     95.3    0.82    0.00       1         generateLuminosity [2]
+                0.20    0.00       1/1           main [1]
+[2]     17.2    0.20    0.00       1         generateLuminosity [2]
 -----------------------------------------------
-                0.04    0.00   15000/15000       main [1]
-[3]      4.7    0.04    0.00   15000         move [3]
-                0.00    0.00   60000/60000       calculateDirection [4]
+                0.02    0.02 1401087/1401087     main [1]
+[3]      3.4    0.02    0.02 1401087         move [3]
+                0.02    0.00 5736197/5736197     calculateDirection [4]
 -----------------------------------------------
-                0.00    0.00   60000/60000       move [3]
-[4]      0.0    0.00    0.00   60000         calculateDirection [4]
+                0.02    0.00 5736197/5736197     move [3]
+[4]      1.7    0.02    0.00 5736197         calculateDirection [4]
 -----------------------------------------------
-                0.00    0.00    3000/3000        main [1]
-[5]      0.0    0.00    0.00    3000         meanMothPosition [5]
+                0.01    0.00    3000/3000        main [1]
+[5]      0.9    0.01    0.00    3000         meanMothPosition [5]
 -----------------------------------------------
                 0.00    0.00       1/1           main [1]
 [6]      0.0    0.00    0.00       1         generateLights [6]
@@ -167,5 +168,6 @@ notice and this notice are preserved.
 
 Index by function name
 
-   [4] calculateDirection      [2] generateLuminosity      [5] meanMothPosition
-   [6] generateLights          [7] generateMoths           [3] move
+   [4] calculateDirection      [7] generateMoths           [3] move
+   [6] generateLights          [1] main
+   [2] generateLuminosity      [5] meanMothPosition

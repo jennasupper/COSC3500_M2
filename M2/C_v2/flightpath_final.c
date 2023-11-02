@@ -60,7 +60,10 @@ int move (
         lights[0][0] - x)*(lights[0][0] - x) + (
             lights[0][1] - y)*(lights[0][1] - y));
 
-    // optimum number of threads is 32???????????????????
+    // omp_set_num_threads(4);
+    // # pragma omp parallel 
+    // {
+    // # pragma omp for
     for (int i = 1; i < L; i++) {
         float distance = sqrt((
             lights[i][0] - x)*(lights[i][0] - x) + (
@@ -70,6 +73,7 @@ int move (
             closest_distance = distance;
         }
     }
+    // }
 
     // convert mean_x and mean_y to ints
     int mean_x_int = (int) mean_x;
@@ -194,6 +198,7 @@ int move (
     // Update moth array
     moth[0] = x;
     moth[1] = y;
+    return 0;
 }
 
 /**
@@ -202,7 +207,7 @@ int move (
 int main () {
 
     // initialisation of the 'luminosity' array
-    float lum[N][N] = {0.0};
+    float lum[N][N] = {{0.0}};
 
     // initialisation of the 'light position' array
     int lights[L][L_SIZE] = {0};
@@ -215,12 +220,25 @@ int main () {
     // populate luminosity array
     generateLuminosity(lum, lights);
 
+    // write lum to a txt file
+    // FILE *fp;
+    // fp = fopen("luminosity.txt", "w");
+    // for (int i = 0; i < N; i++) {
+    //     for (int j = 0; j < N-1; j++) {
+    //         fprintf(fp, "%f,", lum[i][j]);
+    //     }
+    //     fprintf(fp, "%f\n", lum[i][N-1]);
+    // }
+    // fclose(fp);
+
     // Means
     float mean_x;
     float mean_y;
 
     // Begin simulation
     int *allMoths = (int*)malloc(M*1500*M_SIZE*sizeof(int));
+    // omp_set_num_threads(4);
+
     for (int t = 0; t < 1500; t++) {
         // Loop through lights and initialise moth count to 0
         for (int i = 0; i < L; i++) {
@@ -231,9 +249,13 @@ int main () {
         mean_y = meanMothPosition(moths, 1);
 
         // Loop through moths
+        // # pragma omp parallel
+        // {
+        // # pragma omp for
         for (int i = 0; i < M; i++) {
             move(lum, lights, moths[i], mean_x, mean_y);
         }
+        // }
 
         // Save moth state to allMoths
         for (int i = 0; i < M; i++) {

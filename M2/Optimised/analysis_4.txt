@@ -3,8 +3,8 @@ Flat profile:
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
  time   seconds   seconds    calls  ms/call  ms/call  name    
- 93.95      0.82     0.82        1   817.37   817.37  generateLuminosity
-  4.61      0.86     0.04    15000     0.00     0.00  move
+ 95.63      0.82     0.82        1   822.38   822.38  generateLuminosity
+  4.66      0.86     0.04    15000     0.00     0.00  move
   0.00      0.86     0.00    60000     0.00     0.00  calculateDirection
   0.00      0.86     0.00     3000     0.00     0.00  meanMothPosition
   0.00      0.86     0.00        1     0.00     0.00  generateLights
@@ -46,7 +46,7 @@ notice and this notice are preserved.
 		     Call graph (explanation follows)
 
 
-granularity: each sample hit covers 2 byte(s) for 1.17% of 0.86 seconds
+granularity: each sample hit covers 2 byte(s) for 1.16% of 0.86 seconds
 
 index % time    self  children    called     name
                                                  <spontaneous>
