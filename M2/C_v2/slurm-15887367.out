@@ -1,0 +1,10 @@
+ModuleCmd_Load.c(213):ERROR:105: Unable to locate a modulefile for 'compiler-rt/latest'
+mkl(3):ERROR:105: Unable to locate a modulefile for 'mkl/latest'
+ModuleCmd_Load.c(213):ERROR:105: Unable to locate a modulefile for 'cuda/11.1'
+gcc -c -lm -pg -O0 -fopenmp -mavx -std=c99 -g -L/usr/lib64/openmpi/lib -lmpi_cxx -lmpi -I/usr/include/openmpi-x86_64 setup_final.c
+gcc -c -lm -pg -O0 -fopenmp -mavx -std=c99 -g -L/usr/lib64/openmpi/lib -lmpi_cxx -lmpi -I/usr/include/openmpi-x86_64 flightpath_final.c
+gcc setup_final.o flightpath_final.o -lm -pg -O0 -fopenmp -mavx -std=c99 -g -L/usr/lib64/openmpi/lib -lmpi_cxx -lmpi -I/usr/include/openmpi-x86_64 -o flightpath_final
+
+real	0m0.757s
+user	0m2.617s
+sys	0m0.011s

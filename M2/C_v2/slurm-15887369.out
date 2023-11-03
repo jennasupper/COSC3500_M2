@@ -1,0 +1,5 @@
+gcc setup_final.o flightpath_final.o -lm -pg -O0 -fopenmp -mavx -std=c99 -g -L/usr/lib64/openmpi/lib -lmpi_cxx -lmpi -I/usr/include/openmpi-x86_64 -o flightpath_final
+
+real	0m0.733s
+user	0m2.612s
+sys	0m0.009s

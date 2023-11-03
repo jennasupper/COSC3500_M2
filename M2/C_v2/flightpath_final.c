@@ -218,7 +218,9 @@ int main () {
     generateMoths(moths);
 
     // populate luminosity array
+    MPI_Init(NULL, NULL);
     generateLuminosity(lum, lights);
+    MPI_Finalize();
 
     //write lum to a txt file
     // FILE *fp;

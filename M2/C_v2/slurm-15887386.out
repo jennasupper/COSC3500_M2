@@ -1,0 +1,14 @@
+gcc setup_final.o flightpath_final.o -lm -pg -O0 -fopenmp -mavx -std=c99 -g -L/usr/lib64/openmpi/lib -lmpi_cxx -lmpi -I/usr/include/openmpi-x86_64 -o flightpath_final
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./flightpath_final
+Node: smp-9-20
+
+while attempting to start process rank 1.
+--------------------------------------------------------------------------
+
+real	0m0.514s
+user	0m0.025s
+sys	0m0.058s

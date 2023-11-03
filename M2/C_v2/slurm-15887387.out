@@ -1,0 +1,36 @@
+gcc setup_final.o flightpath_final.o -lm -pg -O0 -fopenmp -mavx -std=c99 -g -L/usr/lib64/openmpi/lib -lmpi_cxx -lmpi -I/usr/include/openmpi-x86_64 -o flightpath_final
+--------------------------------------------------------------------------
+[[55330,1],1]: A high-performance Open MPI point-to-point messaging module
+was unable to find any relevant network interfaces:
+
+Module: OpenFabrics (openib)
+  Host: smp-9-20
+
+Another transport will be used instead, although this may result in
+lower performance.
+--------------------------------------------------------------------------
+rank 0
+size 2
+rank 1
+size 2
+[smp-9-20][[55330,1],1][btl_tcp_frag.c:136:mca_btl_tcp_frag_send] mca_btl_tcp_frag_send: writev error (0x2af7d40a4a28, 8)
+	Bad address(4)
+
+[smp-9-20.local:18789] [[55330,1],1] ORTE_ERROR_LOG: Unreachable in file pml_ob1_sendreq.c at line 1130
+-------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code.. Per user-direction, the job has been aborted.
+-------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[55330,1],1]
+  Exit code:    255
+--------------------------------------------------------------------------
+[smp-9-19.local:18244] 1 more process has sent help message help-mpi-btl-base.txt / btl:no-nics
+[smp-9-19.local:18244] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+
+real	0m0.785s
+user	0m0.027s
+sys	0m0.061s

@@ -48,69 +48,87 @@ void generateLuminosity (float lum[N][N], int lights[L][L_SIZE]) {
         }
     }
 
+    int rank, size;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Status status;
+    printf("rank %d\n", rank);
+    printf("size %d\n", size);
+    // Number of rows handled by each process
+
+    int Nperrank = N / size;
+    int myfirstN = rank * Nperrank;
+    int mylastN = (rank + 1) * Nperrank;
+
     // optimum threads is 32 I believe
-    // omp_set_num_threads(4);
-    // optimum loop sizes
-    // size_t ib = std::min(256, N);
-    // size_t jb = std::min(512, N);
-    // size_t kb = std::min(16, N);
+    omp_set_num_threads(4);
 
-    // optimum loop sizes
-    // size_t ib = std::min(256, N);
-    // size_t jb = std::min(512, N);
-    // size_t kb = std::min(16, N);
     // loop through lum array
-    // # pragma omp parallel
-    // {
+    # pragma omp parallel
+    {
     int blockSize = 64;
-    int j, i, k;
+    int jj, ii, kk, j, i, k;
     //auto one = _mm256_set1_ps(1.0);
-    // # pragma omp for
+    # pragma omp for
 
-    for (i = 0; i < N; i+=blockSize) {
+
+    for (i = myfirstN; i < mylastN; i+=blockSize) {
         for (j = 0; j < N; j+=blockSize) {
             //float lum_sum = 0.0;
             // loop through lights array
             for (k = 0; k < L; k++) {
-                for (int di=0; di<blockSize; di++) {
+                for (int di=myfirstN; di<blockSize; di++) {
                     int I = di + i;
                     for (int dj=0; dj<blockSize; dj++) {
                         int J = dj + j;
                         // blocking k doesn't work
                         // calculate distance between light and point (
                         // inverse square law)
+                        //lum[I][J] += 1 / (lum_x[k][I] + lum_y[k][J]);
                         lum[I][J] += 1 / (lum_x[k][I] + lum_y[k][J]);
-                    }
                 }
             }
         }
 
-            // for (k = 0; k < L; k+=blockSize) {
-            //     for (int di=0; di<blockSize; di++) {
-            //         for (int dj=0; dj<blockSize; dj++) {
-
-            //             for (int dk=0; dk<blockSize; dk++) {
-            //                 // calculate distance between light and point (
-            //                 // inverse square law)
-            //                 lum[i+di][j+dj] += 1 / (
-            //                     lum_x[k+dk][i+di] + lum_y[k+dk][j+dj]);
-            //             }
-            //             //lum[i + di][j + dj] = lum_sum * SCALE_FACTOR;
-            //             // calculate distance between light and point (
-            //             // inverse square law)
-            //             // lum_sum += 1 / (
-            //             //     lum_x[k][i] + lum_y[k][j]) + 1 / (
-            //             //         lum_x[k + 1][i] + lum_y[k + 1][j]) + 1 / (
-            //             //             lum_x[k + 2][i] + lum_y[k + 2][j]) + 1 / (
-            //             //                 lum_x[k + 3][i] + lum_y[k + 3][j]) + 1 / (
-            //             //                     lum_x[k + 4][i] + lum_y[k + 4][j]);
-            //         }
-            //     }
-            // }
-            
-        }
+    if (rank == 0) {
+        MPI_Recv(&lum[Nperrank][N], Nperrank*N, MPI_FLOAT, 1, 101, MPI_COMM_WORLD, &status);
+        MPI_Send(&lum[0], Nperrank*N, MPI_FLOAT, 1, 100, MPI_COMM_WORLD);
+    } else {
+        MPI_Send(&lum[Nperrank][N], Nperrank*N, MPI_FLOAT, 0, 101, MPI_COMM_WORLD);
+        MPI_Recv(&lum[0], Nperrank*N, MPI_FLOAT, 0, 100, MPI_COMM_WORLD, &status);
     }
-// }
+    
+    }
+
+
+
+    //         // for (k = 0; k < L; k+=blockSize) {
+    //         //     for (int di=0; di<blockSize; di++) {
+    //         //         for (int dj=0; dj<blockSize; dj++) {
+
+    //         //             for (int dk=0; dk<blockSize; dk++) {
+    //         //                 // calculate distance between light and point (
+    //         //                 // inverse square law)
+    //         //                 lum[i+di][j+dj] += 1 / (
+    //         //                     lum_x[k+dk][i+di] + lum_y[k+dk][j+dj]);
+    //         //             }
+    //         //             //lum[i + di][j + dj] = lum_sum * SCALE_FACTOR;
+    //         //             // calculate distance between light and point (
+    //         //             // inverse square law)
+    //         //             // lum_sum += 1 / (
+    //         //             //     lum_x[k][i] + lum_y[k][j]) + 1 / (
+    //         //             //         lum_x[k + 1][i] + lum_y[k + 1][j]) + 1 / (
+    //         //             //             lum_x[k + 2][i] + lum_y[k + 2][j]) + 1 / (
+    //         //             //                 lum_x[k + 3][i] + lum_y[k + 3][j]) + 1 / (
+    //         //             //                     lum_x[k + 4][i] + lum_y[k + 4][j]);
+    //         //         }
+    //         //     }
+    //         // }
+            
+    //     }
+    }
+}
+}
     // for (int i = 1; i < N; i+=blockSize) {
     //     for (int j = 1; j < N; j+=blockSize) {
     //         //float lum_sum = 0.0;

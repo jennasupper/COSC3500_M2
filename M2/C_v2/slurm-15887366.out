@@ -1,0 +1,10 @@
+ModuleCmd_Load.c(213):ERROR:105: Unable to locate a modulefile for 'compiler-rt/latest'
+mkl(3):ERROR:105: Unable to locate a modulefile for 'mkl/latest'
+ModuleCmd_Load.c(213):ERROR:105: Unable to locate a modulefile for 'cuda/11.1'
+rm flightpath_final.o setup_final.o flightpath_final
+make: *** No rule to make target `all'.  Stop.
+/var/spool/slurmd/job15887366/slurm_script: line 21: ./flightpath_final: No such file or directory
+
+real	0m0.001s
+user	0m0.001s
+sys	0m0.000s
