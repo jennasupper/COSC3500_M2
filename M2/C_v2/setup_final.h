@@ -4,9 +4,9 @@
 
 #define SCALE_FACTOR 2 // set as 0 temporarily
 // MUST BE A FACTOR OF 64
-#define N 2048 // size of the world
-#define L 100 // number of lights
-#define M 50 // number of moths
+#define N 128 // size of the world
+#define L 5 // number of lights
+#define M 10 // number of moths
 #define L_SIZE 2 // size of the light array
 #define M_SIZE 3 // size of the moth array
 

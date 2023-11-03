@@ -48,12 +48,13 @@ void generateLuminosity (float lum[N][N], int lights[L][L_SIZE]) {
         }
     }
 
+    MPI_Init(NULL, NULL);
     int rank, size;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Status status;
-    printf("rank %d\n", rank);
-    printf("size %d\n", size);
+    // printf("rank %d\n", rank);
+    // printf("size %d\n", size);
     // Number of rows handled by each process
 
     int Nperrank = N / size;
@@ -61,42 +62,88 @@ void generateLuminosity (float lum[N][N], int lights[L][L_SIZE]) {
     int mylastN = (rank + 1) * Nperrank;
 
     // optimum threads is 32 I believe
-    omp_set_num_threads(4);
+    // omp_set_num_threads(4);
 
-    // loop through lum array
-    # pragma omp parallel
-    {
+    // // // loop through lum array
+    // # pragma omp parallel
+    // {
     int blockSize = 64;
-    int jj, ii, kk, j, i, k;
-    //auto one = _mm256_set1_ps(1.0);
-    # pragma omp for
+    int j, i, k;
+    // //auto one = _mm256_set1_ps(1.0);
+    // # pragma omp for
 
+    // FILE *fp;
+    // make a file name with rank
+    // char filename[15];
+    // sprintf(filename, "lum_ind_%d_v2.txt", rank);
+    // fp = fopen(filename, "w");
 
     for (i = myfirstN; i < mylastN; i+=blockSize) {
         for (j = 0; j < N; j+=blockSize) {
-            //float lum_sum = 0.0;
-            // loop through lights array
-            for (k = 0; k < L; k++) {
-                for (int di=myfirstN; di<blockSize; di++) {
-                    int I = di + i;
-                    for (int dj=0; dj<blockSize; dj++) {
-                        int J = dj + j;
-                        // blocking k doesn't work
-                        // calculate distance between light and point (
-                        // inverse square law)
-                        //lum[I][J] += 1 / (lum_x[k][I] + lum_y[k][J]);
+            for (int di=0; di<blockSize; di++) {
+                int I = di + i;
+                for (int dj=0; dj<blockSize; dj++) {
+                    int J = dj + j;
+                    lum[I][J] = 0.0;
+                    for (k = 0; k < L; k++) {
+                        // bug here, light locations = inf        
                         lum[I][J] += 1 / (lum_x[k][I] + lum_y[k][J]);
+                    }
                 }
             }
         }
+    }
+    
+    // FILE *fp;
+    // // make a file name with rank
+    // char filename[15];
+    // sprintf(filename, "lum_ind_%d.txt", rank);
+    // fp = fopen(filename, "w");
+    // for (int i = myfirstN; i < mylastN; i++) {
+    //     for (int j = 0; j < N; j++) {
+    //         //float lum_sum = 0.0;
+    //         // loop through lights array
+    //         for (int k = 0; k < L; k++) {
+    //             // calculate distance between light and point (
+    //             // inverse square law)
+    //             lum[i][j] += 1 / (lum_x[k][i] + lum_y[k][j]);
+    //             // fprintf(fp, "%d, %d\n", i, j);
+    //         }
+    //     }
+    // }
+    // fclose(fp);
+
+    // print each element in array with index if not none
+    // FILE *fp;
+    // fp = fopen("lum_testing.txt", "w");
+    // for (int i = myfirstN; i < mylastN; i++) {
+    //     for (int j = 0; j < N; j++) {
+    //         fprintf(fp, "%f ", lum[i][j]);
+    //     }
+    //     fprintf(fp, "\n");
+    // }
+    // fclose(fp);
+
+    // FILE *fp;
+    // fp = fopen("luminosity.txt", "w");
+    // for (int i = 0; i < N; i++) {
+    //     for (int j = 0; j < N-1; j++) {
+    //         fprintf(fp, "%f,", lum[i][j]);
+    //     }
+    //     fprintf(fp, "%f\n", lum[i][N-1]);
+    // }
+    // fclose(fp);
 
     if (rank == 0) {
-        MPI_Recv(&lum[Nperrank][N], Nperrank*N, MPI_FLOAT, 1, 101, MPI_COMM_WORLD, &status);
+
+        MPI_Recv(&lum[Nperrank][0], Nperrank*N, MPI_FLOAT, 1, 101, MPI_COMM_WORLD, &status);
         MPI_Send(&lum[0], Nperrank*N, MPI_FLOAT, 1, 100, MPI_COMM_WORLD);
     } else {
-        MPI_Send(&lum[Nperrank][N], Nperrank*N, MPI_FLOAT, 0, 101, MPI_COMM_WORLD);
+        MPI_Send(&lum[Nperrank][0], Nperrank*N, MPI_FLOAT, 0, 101, MPI_COMM_WORLD);
         MPI_Recv(&lum[0], Nperrank*N, MPI_FLOAT, 0, 100, MPI_COMM_WORLD, &status);
     }
+
+    MPI_Finalize();
     
     }
 
@@ -126,9 +173,9 @@ void generateLuminosity (float lum[N][N], int lights[L][L_SIZE]) {
     //         // }
             
     //     }
-    }
-}
-}
+//     }
+// }
+// }
     // for (int i = 1; i < N; i+=blockSize) {
     //     for (int j = 1; j < N; j+=blockSize) {
     //         //float lum_sum = 0.0;

@@ -218,20 +218,20 @@ int main () {
     generateMoths(moths);
 
     // populate luminosity array
-    MPI_Init(NULL, NULL);
+    
     generateLuminosity(lum, lights);
-    MPI_Finalize();
+    
 
     //write lum to a txt file
-    // FILE *fp;
-    // fp = fopen("luminosity.txt", "w");
-    // for (int i = 0; i < N; i++) {
-    //     for (int j = 0; j < N-1; j++) {
-    //         fprintf(fp, "%f,", lum[i][j]);
-    //     }
-    //     fprintf(fp, "%f\n", lum[i][N-1]);
-    // }
-    // fclose(fp);
+    FILE *fp;
+    fp = fopen("luminosity.txt", "w");
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N-1; j++) {
+            fprintf(fp, "%f,", lum[i][j]);
+        }
+        fprintf(fp, "%f\n", lum[i][N-1]);
+    }
+    fclose(fp);
 
     // Means
     float mean_x;
